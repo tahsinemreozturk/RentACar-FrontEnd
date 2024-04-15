@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Brand } from '../../models/entities/brand';
-import { BrandResponseModel } from '../../models/brandResponseModel';
+import { ListResponseModel } from '../../models/listResponseModel';
+import { BrandService } from '../../services/brand.service';
+import { CarService } from '../../services/car.service';
+import { Car } from '../../models/entities/car';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -10,17 +14,51 @@ import { BrandResponseModel } from '../../models/brandResponseModel';
   styleUrls: ['./brand.component.css'],
 })
 export class BrandComponent {
-  brands:Brand[] = []
-  apiUrl = "https://localhost:44355/api/Brands/GetAll"
+  brands:Brand[] = [] 
+  cars:Car[] = []
+  currentBrand:Brand | null = null;
+  apiUrl = "https://localhost:44355/api/Brands/GetAll";
+  dataLoaded = false;
  
-  constructor(private httpClient:HttpClient){};
+  constructor(private brandService:BrandService, private carService:CarService,private activatedRoute: ActivatedRoute){};
   
   ngOnInit() :void {
-    this.getCars();
+    this.getBrands();
+    this.getAllBrandClass();
+
   }
-  getCars(){
-    this.httpClient.get<BrandResponseModel>(this.apiUrl).subscribe((response) =>{
-      this.brands = response.data;
-    } )
-    };
+
+  getBrands(){
+   this.brandService.getBrands().subscribe(response =>{
+    this.brands = response.data
+    this.dataLoaded = true;
+   })
+  };
+    
+  setCurrentBrand(brand:Brand){
+    this.currentBrand = brand;
+    this.dataLoaded = true; 
+  }  
+
+  getCurrentBrandClass(brand:Brand){
+   
+    if (brand == this.currentBrand) {
+      return "list-group-item active"
+    }else{
+      return "list-group-item"
+    }
+  }
+  getAllBrandClass(){
+   
+    if(!this.currentBrand){
+      return "list-group-item active"
+    }else{
+      return "list-group-item"
+    }
+  }
+
+  clearCurrentBrand() {
+    this.currentBrand = null;
+  }
+
 }

@@ -9,6 +9,7 @@ import { BrandComponent } from './components/brand/brand.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { ColorComponent } from './components/color/color.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { RouterOutlet } from '@angular/router';
     NavbarComponent,
     CarComponent,
     BrandComponent,
+    ColorComponent,
 
   ],
   imports: [
